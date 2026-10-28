@@ -20,10 +20,11 @@ Small experimental demos and executable scene studies.
 - [Dem13](Dem13/) — a 64K macOS intro about a person and dog meeting in a responsive triangular world.
 - [Dem14](Dem14/) — a 57-second first-person Metal demo through two procedural architectural halls.
 - [Dem15](Dem15/) — a 60-second journey through a world emerging from a planet, volcanoes, water, and living forms.
+- [DemFinal](DemFinal/) — a 45-second waves-only demo with Dem2 ambient sound, FPS, and GPU-frame-share indicators.
 
 ## Running a macOS demo without Developer ID signing or notarization
 
-Dem1 through Dem15 are Apple Silicon (arm64) executables with ad-hoc signatures. They are not signed with an Apple Developer ID and are not notarized, so macOS Gatekeeper may prevent them from opening. Intel Macs are unsupported.
+Dem1 through Dem15 and DemFinal are Apple Silicon (arm64) executables with ad-hoc signatures. They are not signed with an Apple Developer ID and are not notarized, so macOS Gatekeeper may prevent them from opening. Intel Macs are unsupported.
 
 From Terminal, go to the demo folder, remove the quarantine attribute from that executable, and run it. Example for Dem5:
 
