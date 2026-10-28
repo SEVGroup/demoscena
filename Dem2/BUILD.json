@@ -1,0 +1,9 @@
+{
+  "executable_bytes": 53328,
+  "limit_bytes": 65536,
+  "sha256": "0a65a5f5fb50928cc12ca3eddaa9f9df8263d90ed17d22b913ee63f3632fffd3",
+  "architecture": "arm64",
+  "target": "macOS",
+  "scenes": 3,
+  "audio": "continuous soft synth drone, no percussion"
+}

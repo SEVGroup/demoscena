@@ -6,17 +6,18 @@ Small experimental demos and executable scene studies.
 
 - [Dem0](Dem0/) — 64K intro prototype.
 - [Dem1](Dem1/) — 64K native macOS intro prototype with four scene captures.
+- [Dem2](Dem2/) — 64K native macOS intro prototype with three scene captures.
 
-## Running the unsigned macOS app
+## Running an unsigned macOS demo
 
-The `Dem1/Dem1` executable is an **unsigned, not notarized** Apple Silicon (arm64) app. macOS Gatekeeper may prevent it from opening. Only run it if you trust this repository and its contents.
+Dem1 and Dem2 are unsigned, not notarized Apple Silicon (arm64) executables. macOS Gatekeeper may prevent them from opening. Run them only if you trust this repository and its contents. Intel Macs are unsupported.
 
-1. Download or clone this repository, then open the `Dem1` folder.
-2. In Finder, Control-click `Dem1` and choose **Open**. In the warning dialog, choose **Open** again. If macOS still blocks it, go to **System Settings → Privacy & Security** and use **Open Anyway** for this app.
-3. Or, in Terminal from the `Dem1` folder, remove the quarantine attribute from this one file and launch it:
-   ```sh
-   xattr -d com.apple.quarantine ./Dem1
-   ./Dem1
-   ```
+From Terminal, open the demo folder and remove the quarantine attribute from the specific executable you intend to run:
 
-The quarantine-removal command only changes this executable; it does not disable Gatekeeper globally. The included `Launch.command` starts the same app. The build currently targets arm64 Macs; Intel Macs are unsupported. See [Dem1/README.md](Dem1/README.md) for controls and scene screenshots.
+```sh
+cd Dem2  # or: cd Dem1
+xattr -d com.apple.quarantine ./Dem2  # use ./Dem1 for Dem1
+./Dem2  # use ./Dem1 for Dem1
+```
+
+This changes the selected file only; it does not disable Gatekeeper globally. You can also Control-click `Launch.command` in Finder and choose **Open**. If macOS still blocks launch, check **System Settings → Privacy & Security** for **Open Anyway** after attempting to open it once. See each demo's README for controls and screenshots.

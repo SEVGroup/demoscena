@@ -1,0 +1,47 @@
+#include <metal_stdlib>
+using namespace metal;
+struct V{float4 p [[position]];};
+vertex V vert(uint i [[vertex_id]]){float2 p=float2((i<<1)&2,i&2);return {float4(p*2-1,0,1)};}
+float2 rot(float2 p,float a){return float2(cos(a)*p.x-sin(a)*p.y,sin(a)*p.x+cos(a)*p.y);}
+float3 pal(float x){return .5+.5*cos(6.28318*(x+float3(0,.32,.67)));}
+fragment float4 frag(V v [[stage_in]],constant float3 &u [[buffer(0)]]){
+ float t=u.z;float2 uv=(v.p.xy*2-u.xy)/u.y;float3 c=0;float scene=floor(t/32.);float local=fmod(t,32.);
+ if(scene<1.){
+  float2 p=rot(uv,t*.055);float r=length(p);float a=atan2(p.y,p.x);
+  float pulse=.14+.035*sin(t*.42);float core=exp(-r*r/(pulse*pulse));
+  float shell=exp(-abs(r-(.22+.018*sin(a*5.+t*.3)))*55.);
+  float rays=pow(max(0.,cos(a*9.+t*.12)),20.)*exp(-r*2.2);
+  c+=pal(a*.11+t*.014)*(core*1.05+shell*.68+rays*.27);
+  for(int i=0;i<36;i++){float f=float(i);float ang=f*2.399+t*(.08+.004*f);float spread=smoothstep(20.,31.,t);float rr=.18+fract(f*.618+t*.012)*(.15+.1*sin(t*.12+f))+spread*.18;float2 q=p-float2(cos(ang),sin(ang))*rr;float d=length(q);c+=pal(f*.07+t*.012)*.0032/(d+.005);}
+  c+=pal(t*.01)*.025/(r+.08);
+ }else if(scene<2.){
+  float2 p=rot(uv-float2(.02*sin(t*.1),-.05),.045*sin(t*.12));
+  float r=length(p);float a=atan2(p.y,p.x);float planet=length(p-float2(0,-.12));
+  float surface=exp(-abs(planet-.39)*115.);
+  float shade=1.-smoothstep(.32,.40,planet);
+  float ringR=abs(r-(.59+.045*sin(a*3.+t*.06)));
+  float rings=exp(-ringR*120.)*(.4+.6*pow(max(0.,sin(a*11.+t*.025)),5.));
+  float atmosphere=exp(-abs(planet-.405)*48.);
+  float bands=exp(-abs(fract((p.y+planet*.24)*22.+.06*sin(a*5.+t*.08))-.5)*55.);
+  c+=pal(.56+a*.08+t*.009)*(surface*.88+rings*.40+atmosphere*.24);
+  c+=pal(.35+p.y*.2+t*.012)*shade*bands*.14;
+  c+=pal(t*.008)*.018/(r+.12);
+ }else{
+  float2 p=rot(uv,t*.025);float r=length(p);float a=atan2(p.y,p.x);
+  float n=sin(a*3.+t*.10+sin(a*6.-t*.08))*sin(r*8.-t*.14);
+  float cloud=exp(-r*.72)*(.58+.42*n);
+  float wisps=0.;
+  for(int i=0;i<7;i++){float f=float(i);float2 q=p;q.y+=.24*sin(q.x*(1.8+f*.11)+t*.12+f);q.x+=.11*sin(q.y*4.-t*.09+f*.8);float d=abs(q.y-(f-3.)*.18);wisps+=.012/(d+.018);}
+  float ringEcho=exp(-abs(r-(.59+.05*sin(a*3.+t*.06)))*22.)*exp(-local*.16);
+  c+=pal(a*.1+t*.01)*ringEcho*.18;
+  float hole=exp(-r*8.);
+  c+=pal(.48+n*.07+t*.012)*cloud*1.0;
+  c+=pal(a*.08+t*.01)*wisps*exp(-r*.38)*.20;
+  c-=hole*.045;
+ }
+ float edge=1.-.22*dot(uv,uv);c=max(c*edge,0.);c=1.-exp(-c*1.8);c=pow(c,float3(.8));
+ float fade=smoothstep(0.,2.,t)*(1.-smoothstep(94.,96.,t));
+ 
+ c*=fade;
+ return float4(c,1);
+}
