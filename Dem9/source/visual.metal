@@ -1,0 +1,11 @@
+#include <metal_stdlib>
+using namespace metal;
+struct V{float4 p [[position]];};
+vertex V vert(uint i [[vertex_id]]){float2 p=float2((i<<1)&2,i&2);return {float4(p*2-1,0,1)};}
+float2 rot(float2 p,float a){return float2(cos(a)*p.x-sin(a)*p.y,sin(a)*p.x+cos(a)*p.y);}
+float3 pal(float x){return .5+.5*cos(6.283185*(x+float3(0.,.33,.67)));}
+float ln(float d,float w){return w/(abs(d)+w);}
+fragment float4 frag(V v [[stage_in]],constant float3 &u [[buffer(0)]]){
+ float t=u.z;float2 uv=(v.p.xy*2-u.xy)/u.y;float r=length(uv);float scene=floor(t/32.),lt=fmod(t,32.);float3 c=0.;
+ if(scene<1.){float2 p=rot(uv,t*.05);float a=atan2(p.y,p.x),r=length(p);float w=sin(a*4.+lt*.15+sin(r*8.-lt*.23));float d=abs(r-.4-.13*w);c+=pal(w*.12+lt*.018)*ln(d,.012)*.13;float bubbles=sin(p.x*12.+sin(p.y*9.+lt*.2))*sin(p.y*11.-lt*.18);c+=pal(bubbles*.1+lt*.01)*smoothstep(.8,.98,bubbles)*.08;}else if(scene<2.){for(int i=0;i<18;i++){float f=float(i),a=f*2.399+lt*(.1+.005*f),r=.15+fract(f*.618+lt*.012)*.9;float2 q=uv-float2(cos(a),sin(a))*r;float d=length(q);float blob=abs(d-(.035+.018*sin(lt*.45+f)));c+=pal(f*.09+lt*.014)*(ln(blob,.004)*.045+exp(-d*12.)*.008);}}else{float2 p=rot(uv,lt*.055);float field=sin(p.x*4.+sin(p.y*3.+lt*.16))*cos(p.y*5.-lt*.2);float edge=abs(fract((field+1.)*6.)-.5);c+=pal(field*.12+lt*.02)*ln(edge,.035)*.12;float ring=abs(length(p)-(.5+.18*sin(atan2(p.y,p.x)*3.+lt*.15)));c+=pal(lt*.018)*ln(ring,.008)*.08;}
+ c*=1.-.18*smoothstep(.25,1.7,r);c=1.-exp(-max(c,0.)*1.8);c=pow(c,float3(.82));float fade=smoothstep(0.,2.,t)*(1.-smoothstep(94.,96.,t));c*=fade;return float4(c,1.);}

@@ -10,10 +10,15 @@ Small experimental demos and executable scene studies.
 - [Dem3](Dem3/) — AFTERIMAGE, a silent monochrome three-scene intro for Apple Silicon macOS.
 - [Dem4](Dem4/) — a silent monochrome intro with three motion-focused scenes.
 - [Dem5](Dem5/) — a silent color intro with three scenes.
+- [Dem6](Dem6/) — a silent 96-second color intro for Apple Silicon macOS.
+- [Dem7](Dem7/) — a silent 96-second color intro for Apple Silicon macOS.
+- [Dem8](Dem8/) — a silent 96-second color intro for Apple Silicon macOS.
+- [Dem9](Dem9/) — a silent 96-second color intro for Apple Silicon macOS.
+- [Dem10](Dem10/) — a silent 96-second color intro for Apple Silicon macOS.
 
 ## Running a macOS demo without Developer ID signing or notarization
 
-Dem1, Dem2, Dem3, Dem4, and Dem5 are Apple Silicon (arm64) executables with ad-hoc signatures. They are not signed with an Apple Developer ID and are not notarized, so macOS Gatekeeper may prevent them from opening. Run them only if you trust this repository. Intel Macs are unsupported.
+Dem1 through Dem10 are Apple Silicon (arm64) executables with ad-hoc signatures. They are not signed with an Apple Developer ID and are not notarized, so macOS Gatekeeper may prevent them from opening. Intel Macs are unsupported.
 
 From Terminal, go to the demo folder, remove the quarantine attribute from that executable, and run it. Example for Dem5:
 
@@ -23,4 +28,4 @@ xattr -d com.apple.quarantine ./Dem5
 ./Dem5
 ```
 
-Use the corresponding folder and executable name for Dem1, Dem2, Dem3, or Dem4. Removing quarantine this way only changes that file; it does not disable Gatekeeper globally. You can also Control-click `Launch.command` in Finder and choose **Open**. If macOS still blocks launch, check **System Settings → Privacy & Security** for **Open Anyway** after attempting to open it once. See each demo's README for controls and screenshots.
+Use the corresponding folder and executable name for another demo. Removing quarantine this way only changes that file; it does not disable Gatekeeper globally. You can also Control-click `Launch.command` in Finder and choose **Open**. If macOS still blocks launch, check **System Settings → Privacy & Security** for **Open Anyway** after attempting to open it once. See each demo's README for controls and screenshots.
