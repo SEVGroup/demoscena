@@ -1,0 +1,9 @@
+{
+  "executable_bytes": 53488,
+  "limit_bytes": 65536,
+  "sha256": "458d03c72511ebbd98fec94eebf1564369ac9fb8e577116d6665c8291334686b",
+  "architecture": "arm64",
+  "deployment_target": "macOS 13.0",
+  "tested_host": "Apple M2 / macOS 27.0.1",
+  "ai_authored": true
+}
