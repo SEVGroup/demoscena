@@ -1,0 +1,9 @@
+{
+  "executable_bytes": 52864,
+  "limit_bytes": 65536,
+  "sha256": "8e4f32580b6c2a9fbf75bc8076acb36369ba466e4453d5aca2b4ed71e3306059",
+  "architecture": "arm64",
+  "target": "macOS",
+  "scenes": 3,
+  "audio": "silent"
+}

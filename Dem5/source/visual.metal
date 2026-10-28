@@ -1,0 +1,25 @@
+#include <metal_stdlib>
+using namespace metal;
+struct V{float4 p [[position]];};
+vertex V vert(uint i [[vertex_id]]){float2 p=float2((i<<1)&2,i&2);return {float4(p*2-1,0,1)};}
+float2 rot(float2 p,float a){return float2(cos(a)*p.x-sin(a)*p.y,sin(a)*p.x+cos(a)*p.y);}
+float3 pal(float x){return .5+.5*cos(6.283185*(x+float3(0.,.33,.67)));}
+float line(float d,float w){return w/(abs(d)+w);}
+fragment float4 frag(V v [[stage_in]],constant float3 &u [[buffer(0)]]){
+ float t=u.z;float2 uv=(v.p.xy*2-u.xy)/u.y;float r=length(uv),a=atan2(uv.y,uv.x);float scene=floor(t/32.),lt=fmod(t,32.);float3 c=0.;
+ if(scene<1.){
+  float2 p=rot(uv,t*.13);
+  for(int i=0;i<16;i++){float f=float(i),ang=f*2.399+t*(.16+.009*f);float rr=.08+fract(f*.618+t*.019)*.72;float2 center=float2(cos(ang),sin(ang))*rr;float2 q=p-center;float d=length(q);float blob=exp(-d*(24.+8.*sin(t*.5+f)));float ring=line(d-(.024+.012*sin(t*.6+f)),.003);c+=pal(f*.09+t*.018)*(blob*.075+ring*.025);}
+  float flow=sin(uv.x*3.+t*.4+sin(uv.y*4.-t*.3));c+=pal(flow*.08+t*.022)*exp(-abs(flow-uv.y)*14.)*.08;
+ }else if(scene<2.){
+  for(int i=0;i<20;i++){float f=float(i);float phase=f*.77;float2 center=float2(1.4*sin(lt*(.18+f*.004)+phase),.8*cos(lt*(.21+f*.006)+phase*1.3));float2 q=rot(uv-center,lt*(.2+f*.018));float2 b=float2(.025+.018*fract(f*.31),.04+.02*fract(f*.17));float box=abs(max(abs(q.x)-b.x,abs(q.y)-b.y));float edge=line(box,.003);float inner=step(abs(q.x),b.x)*step(abs(q.y),b.y)*(.25+.25*sin(lt+f));c+=pal(f*.055+lt*.014)*(edge*.035+inner*.008);}
+  float cross=line(abs(uv.x-.2*sin(lt*.15)),.002)*step(abs(uv.y),.7);c+=pal(lt*.02)*cross*.12;
+ }else{
+  float2 p=rot(uv,t*.06);float z=1./max(length(p),.025)+lt*.9;float twist=atan2(p.y,p.x)+.4*sin(z*.25);
+  float grid=abs(fract(z*.12)-.5);float rays=abs(fract(twist*2.2)-.5);float weave=line(min(grid,rays),.018);
+  c+=pal(z*.045+twist*.08+t*.012)*weave*(.12+.12*exp(-r*2.));
+  for(int i=0;i<22;i++){float f=float(i),ang=f*2.399+lt*(.07+.002*f);float rr=fract(f*.618+lt*.025)*1.4;float2 q=p-float2(cos(ang),sin(ang))*rr;float d=length(q);c+=pal(f*.08+lt*.02)*.006/(d+.006);}
+ }
+ c*=1.-.2*smoothstep(.3,1.8,r);c=1.-exp(-max(c,0.)*2.);c=pow(c,float3(.82));float fade=smoothstep(0.,2.,t)*(1.-smoothstep(94.,96.,t));c*=fade;
+ return float4(c,1.);
+}
