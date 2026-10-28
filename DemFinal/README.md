@@ -9,3 +9,7 @@ Build with `source/build.sh`, then run `DemFinal` or `Launch.command`. The build
 Controls: F (including Russian layout А) toggles fullscreen; Esc or Cmd+Q quits.
 
 Live FPS and GPU-frame-share estimates are shown in the upper-right corner. GPU % is this demo's Metal execution time divided by the frame duration, not total system GPU utilization.
+
+## Screenshot
+
+![Waves at full brightness](screenshots/01-waves.png)
