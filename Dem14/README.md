@@ -8,6 +8,8 @@ Build with `source/build.sh`, then run `Dem14` or `Launch.command`. The build sc
 
 Controls: F (including Russian layout А) toggles fullscreen; Esc or Cmd+Q quits.
 
+The live lower-right overlay shows FPS, frame time, a rolling 20-second frame-time graph, and GPU %. GPU % estimates the share of each frame spent executing this demo's Metal commands; it is not a system-wide GPU utilization reading.
+
 ## Screenshots
 
 | Moment | Capture |
